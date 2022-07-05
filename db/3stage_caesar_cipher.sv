@@ -88,6 +88,7 @@ module 3stage_caesar_cipher (
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
+        endcase
 
 		case (2nd_key_shift_direction)
 			1'b0: begin
@@ -107,6 +108,7 @@ module 3stage_caesar_cipher (
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
+        endcase
 		
 		case (3rd_key_shift_direction)
 			1'b0: begin
@@ -126,6 +128,7 @@ module 3stage_caesar_cipher (
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
+        endcase
 
     end
 	
