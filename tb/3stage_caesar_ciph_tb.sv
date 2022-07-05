@@ -20,28 +20,28 @@ module caesar_ciph_tb_checks;
   reg        shift_dir_3;
   reg  [4:0] shift_N_1;
   reg  [4:0] shift_N_3;
-  reg  [7:0] ptxt_char;
+  reg  [7:0] plaintext_char;
   reg     input_valid;
-  reg     mode;
-  wire [7:0] ctxt_char;
+  reg     flag_cipher_operation;
+  wire [7:0] ciphertext_char;
   wire    invalid_key;
   wire    invalid_char;
   wire    ready;
 
-  caesar_cipher INSTANCE_NAME (
+  3stage_caesar_cipher INSTANCE_NAME (
       .clk                      (clk)
     ,.rst_n                     (rst_n)
-    ,.ptxt_valid                (input_valid)
-    ,.mode                      (mode)
-    ,.key_shift_dir_1           (shift_dir_1)
-    ,.key_shift_dir_3           (shift_dir_3)
-    ,.key_shift_num_1           (shift_N_1)
-    ,.key_shift_num_3           (shift_N_3)
-    ,.ptxt_char                 (ptxt_char)
-    ,.ctxt_char                 (ctxt_char)
+    ,.flag_valid_plaintext_char                (input_valid)
+    ,.flag_cipher_operation                      (flag_cipher_operation)
+    ,.1st_key_shift_direction            (shift_dir_1)
+    ,.3rd_key_shift_direction            (shift_dir_3)
+    ,.1st_key_shift_number           (shift_N_1)
+    ,.3rd_key_shift_number           (shift_N_3)
+    ,.plaintext_char                 (plaintext_char)
+    ,.ciphertext_char                 (ciphertext_char)
     ,.err_invalid_key_shift_num (invalid_key)
     ,.err_invalid_ptxt_char     (invalid_char)
-    ,.ctx_ready                 (ready)
+    ,.flag_ciphertext_ready                 (ready)
   );
   
   reg [7:0] EXPECTED_GEN;
@@ -58,11 +58,11 @@ module caesar_ciph_tb_checks;
   wire err_invalid_key_shift_num = shift_N_1 > 26 || shift_N_3 > 26 || shift_N_1 == shift_N_3; // control of the conditions on the shift values
 
   
-  wire ptxt_char_is_uppercase_letter = (ptxt_char >= UPPERCASE_A_CHAR) &&
-                                       (ptxt_char <= UPPERCASE_Z_CHAR);   //control if the character is uppercase
+  wire ptxt_char_is_uppercase_letter = (plaintext_char >= UPPERCASE_A_CHAR) &&
+                                       (plaintext_char <= UPPERCASE_Z_CHAR);   //control if the character is uppercase
                                          
-  wire ptxt_char_is_lowercase_letter = (ptxt_char >= LOWERCASE_A_CHAR) &&
-                                       (ptxt_char <= LOWERCASE_Z_CHAR); //control if the character is lowercase
+  wire ptxt_char_is_lowercase_letter = (plaintext_char >= LOWERCASE_A_CHAR) &&
+                                       (plaintext_char <= LOWERCASE_Z_CHAR); //control if the character is lowercase
                                          
   wire ptxt_char_is_letter = ptxt_char_is_uppercase_letter ||
                              ptxt_char_is_lowercase_letter;
@@ -81,18 +81,18 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
 		shift_N_3 = 5'd5;	// Set number of positions to be shifted for 3st stage to 5
 		input_valid = 1'b1;	// 
-		mode = 1'b0;		//
+		flag_cipher_operation = 1'b0;		//
     
     fork
     
       begin: STIMULI_1R
         for(int i = 0; i < 26; i++) begin
-			 ptxt_char = "A" + i;
+			 plaintext_char = "A" + i;
           @(posedge clk);
         end
         
         for(int i = 0; i < 26; i++) begin
-			 ptxt_char = "a" + i;
+			 plaintext_char = "a" + i;
           @(posedge clk);
         end
       end: STIMULI_1R
@@ -102,7 +102,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
         
-          $display("%c", ctxt_char);
+          $display("%c", ciphertext_char);
       
         end
       end: CHECK_1R
@@ -115,20 +115,20 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
 		shift_N_3 = 5'd26;	// Set number of positions to be shifted for 3st stage to 26
 		input_valid = 1'b1;	// 
-		mode = 1'b1;		//
+		flag_cipher_operation = 1'b1;		//
 		
     
     fork
     
       begin: STIMULI_1L
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "A" + i;
+          plaintext_char = "A" + i;
           @(posedge clk);
 
         end
         
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "a" + i;
+          plaintext_char = "a" + i;
           @(posedge clk);
 
         end
@@ -139,7 +139,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
        
-          $display("%c", ctxt_char);
+          $display("%c", ciphertext_char);
         
         end
       end: CHECK_1L
@@ -152,19 +152,19 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
 		shift_N_3 = 5'd6;	// Set number of positions to be shifted for 3st stage to 6
 		input_valid = 1'b1;	// 
-		mode = 1'b0;		//
+		flag_cipher_operation = 1'b0;		//
     
     fork
     
       begin: STIMULI_5R
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "A" + i;
+          plaintext_char = "A" + i;
           @(posedge clk);
  
         end
         
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "a" + i;
+          plaintext_char = "a" + i;
           @(posedge clk);
  
         end
@@ -175,7 +175,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
       
-          $display("%c", ctxt_char);
+          $display("%c", ciphertext_char);
      
         end
       end: CHECK_5R
@@ -188,19 +188,19 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
 		shift_N_3 = 5'd2;	// Set number of positions to be shifted for 3st stage to 2
 		input_valid = 1'b1;	// 
-		mode = 1'b1;		//
+		flag_cipher_operation = 1'b1;		//
     
     fork
     
       begin: STIMULI_5L
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "A" + i;
+          plaintext_char = "A" + i;
           @(posedge clk);
       
         end
         
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "a" + i;
+          plaintext_char = "a" + i;
           @(posedge clk);
      
         end
@@ -211,7 +211,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
       
-          $display("%c", ctxt_char);
+          $display("%c", ciphertext_char);
     
         end
       end: CHECK_5L
@@ -224,13 +224,13 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
 		shift_N_3 = 5'd20;	// Set number of positions to be shifted for 3st stage to 20
 		input_valid = 1'b1;	// 
-		mode = 1'b0;		//
+		flag_cipher_operation = 1'b0;		//
     
     fork
     
       begin: STIMULI_1R_FULL_SWEEP
         for(int i = 0; i < 128; i++) begin
-          ptxt_char = 8'h00 + i;
+          plaintext_char = 8'h00 + i;
           @(posedge clk);
       
         end
@@ -241,7 +241,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 128; j++) begin
           @(posedge clk);
     
-          $display("%c", ctxt_char);
+          $display("%c", ciphertext_char);
      
         end
       end: CHECK_1R_FULL_SWEEP
@@ -254,19 +254,19 @@ module caesar_ciph_tb_checks;
 		shift_N_1 = 5'd28;	// Set number of positions to be shifted for 1st stage to 28
 		shift_N_3 = 5'd1;	// Set number of positions to be shifted for 3st stage to 1
 		input_valid = 1'b1;	// 
-		mode = 1'b1;		//
+		flag_cipher_operation = 1'b1;		//
     
     fork
     
       begin: STIMULI_1R_INVALID_SHIFT_N
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "A" + i;
+          plaintext_char = "A" + i;
           @(posedge clk);
        
         end
         
         for(int i = 0; i < 26; i++) begin
-          ptxt_char = "a" + i;
+          plaintext_char = "a" + i;
           @(posedge clk);
      
         end
@@ -277,7 +277,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
       
-          $display("%c ", ctxt_char);
+          $display("%c ", ciphertext_char);
        
         end
       end: CHECK_1R_INVALID_SHIFT_N
@@ -313,28 +313,28 @@ module caesar_ciph_tb_file_enc;
   reg        shift_dir_3;
   reg  [4:0] shift_N_1;
   reg  [4:0] shift_N_3;
-  reg  [7:0] ptxt_char;
+  reg  [7:0] plaintext_char;
   reg     input_valid;
-  reg     mode;
-  wire [7:0] ctxt_char;
+  reg     flag_cipher_operation;
+  wire [7:0] ciphertext_char;
   wire    invalid_key;
   wire    invalid_char;
   wire    ready;
 
-  caesar_cipher INSTANCE_NAME (
+  3stage_caesar_cipher INSTANCE_NAME (
      .clk                       (clk)
     ,.rst_n                     (rst_n)
-    ,.ptxt_valid         (input_valid)
-    ,.mode            (mode)
-    ,.key_shift_dir_1             (shift_dir_1)
-    ,.key_shift_dir_3             (shift_dir_3)
-    ,.key_shift_num_1            (shift_N_1)
-    ,.key_shift_num_3            (shift_N_3)
-    ,.ptxt_char                 (ptxt_char)
-    ,.ctxt_char                 (ctxt_char)
+    ,.flag_valid_plaintext_char         (input_valid)
+    ,.flag_cipher_operation            (flag_cipher_operation)
+    ,.1st_key_shift_direction              (shift_dir_1)
+    ,.3rd_key_shift_direction              (shift_dir_3)
+    ,.1st_key_shift_number            (shift_N_1)
+    ,.3rd_key_shift_number            (shift_N_3)
+    ,.plaintext_char                 (plaintext_char)
+    ,.ciphertext_char                 (ciphertext_char)
     ,.err_invalid_key_shift_num (invalid_key)
     ,.err_invalid_ptxt_char     (invalid_char)
-    ,.ctx_ready         (ready)
+    ,.flag_ciphertext_ready         (ready)
   );
  
   
@@ -375,17 +375,17 @@ module caesar_ciph_tb_file_enc;
 		shift_N_1 = 5'd16;
 		shift_N_3 = 5'd1;
 		input_valid = 1'b1;
-		mode = 1'b0;
+		flag_cipher_operation = 1'b0;
     
     while($fscanf(FP_PTXT, "%c", char) == 1) begin  //the characters of the file are encrypted and placed in a buffer
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       @(posedge clk);
       if(
-        ((ptxt_char >= UPPERCASE_A_CHAR ) && (ptxt_char <= UPPERCASE_Z_CHAR)) ||
-        ((ptxt_char >= LOWERCASE_A_CHAR ) && (ptxt_char <= LOWERCASE_Z_CHAR))
+        ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
+        ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
       ) begin
         @(posedge clk);
-        CTXT.push_back(ctxt_char);
+        CTXT.push_back(ciphertext_char);
       end
       else begin
         CTXT.push_back(NUL_CHAR);
@@ -402,9 +402,9 @@ module caesar_ciph_tb_file_enc;
 	
 	FP_PTXT = $fopen("model/enc.txt", "r"); //the file containing the encrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       begin
-		CTXT_source.push_back(ptxt_char);
+		CTXT_source.push_back(plaintext_char);
       end
     end;
     $fclose(FP_PTXT);
@@ -420,17 +420,17 @@ module caesar_ciph_tb_file_enc;
     @(posedge clk);
     FP_CTXT = $fopen("tv/ctxt_HW.txt", "r"); //the file containing the encrypted text is opened
     $write("Decrypting file 'tv/ctxt_HW.txt' to 'tv/dec_HW.txt'... ");
-		mode = 1'b1;
+		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin //the characters of the file are decrypted and placed in a buffer
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       @(posedge clk);
       if(
-        ((ptxt_char >= UPPERCASE_A_CHAR ) && (ptxt_char <= UPPERCASE_Z_CHAR)) ||
-        ((ptxt_char >= LOWERCASE_A_CHAR ) && (ptxt_char <= LOWERCASE_Z_CHAR))
+        ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
+        ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
       ) begin
         @(posedge clk);
-        PTXT.push_back(ctxt_char);
+        PTXT.push_back(ciphertext_char);
       end
       else
         PTXT.push_back(NUL_CHAR);
@@ -446,9 +446,9 @@ module caesar_ciph_tb_file_enc;
 	
 	FP_PTXT = $fopen("model/dec.txt", "r"); //the file containing the decrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       begin
-		PTXT_source.push_back(ptxt_char);
+		PTXT_source.push_back(plaintext_char);
       end
     end;
     $fclose(FP_PTXT);
@@ -474,17 +474,17 @@ module caesar_ciph_tb_file_enc;
 		shift_N_1 = 5'd16;
 		shift_N_3 = 5'd1;
 		input_valid = 1'b1;
-		mode = 1'b0;
+		flag_cipher_operation = 1'b0;
     
     while($fscanf(FP_PTXT, "%c", char) == 1) begin
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       @(posedge clk);
       if(
-        ((ptxt_char >= UPPERCASE_A_CHAR ) && (ptxt_char <= UPPERCASE_Z_CHAR)) ||
-        ((ptxt_char >= LOWERCASE_A_CHAR ) && (ptxt_char <= LOWERCASE_Z_CHAR))
+        ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
+        ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
       ) begin
         @(posedge clk);
-        CTXT2.push_back(ctxt_char);
+        CTXT2.push_back(ciphertext_char);
       end
       else begin
         CTXT2.push_back(NUL_CHAR);
@@ -501,9 +501,9 @@ module caesar_ciph_tb_file_enc;
 	
 	FP_PTXT = $fopen("model/enc2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       begin
-		CTXT_source2.push_back(ptxt_char);
+		CTXT_source2.push_back(plaintext_char);
       end
     end;
     $fclose(FP_PTXT);
@@ -519,17 +519,17 @@ module caesar_ciph_tb_file_enc;
     @(posedge clk);
     FP_CTXT = $fopen("tv/ctxt_HW2.txt", "r");
     $write("Decrypting file 'tv/ctxt_HW2.txt' to 'tv/dec_HW2.txt'... ");
-		mode = 1'b1;
+		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       @(posedge clk);
       if(
-        ((ptxt_char >= UPPERCASE_A_CHAR ) && (ptxt_char <= UPPERCASE_Z_CHAR)) ||
-        ((ptxt_char >= LOWERCASE_A_CHAR ) && (ptxt_char <= LOWERCASE_Z_CHAR))
+        ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
+        ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
       ) begin
         @(posedge clk);
-        PTXT2.push_back(ctxt_char);
+        PTXT2.push_back(ciphertext_char);
       end
       else
         PTXT2.push_back(NUL_CHAR);
@@ -545,9 +545,9 @@ module caesar_ciph_tb_file_enc;
 	
 	FP_PTXT = $fopen("model/dec2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
-      ptxt_char = int'(char);
+      plaintext_char = int'(char);
       begin
-		PTXT_source2.push_back(ptxt_char);
+		PTXT_source2.push_back(plaintext_char);
       end
     end;
     $fclose(FP_PTXT);

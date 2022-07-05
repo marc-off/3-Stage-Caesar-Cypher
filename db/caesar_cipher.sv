@@ -202,8 +202,8 @@ endmodule
     // else if(err_invalid_ptxt_char_wire || err_invalid_key_shift_num_wire)
       // ctxt_char <= `NULL_CHAR;
     // else
-      // ctxt_char <= sub_letter;
       
+      // ctxt_char <= sub_letter;
       
 // endmodule
 
