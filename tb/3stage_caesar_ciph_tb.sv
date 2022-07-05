@@ -9,11 +9,11 @@ module caesar_ciph_tb_checks;
   
   //codice per il segnale di reset
   reg rst_n = 1'b0;
-  event reset_deassertion;
+  event reset_deassertion;	// event(s), when asserted, can be used as time trigger(s) to synchronize with
   
   initial begin
     #12.8 rst_n = 1'b1;
-    -> reset_deassertion;
+    -> reset_deassertion;	// trigger event named 'reset_deassertion'
   end
   
   reg        shift_dir_1;
@@ -46,7 +46,7 @@ module caesar_ciph_tb_checks;
   
   reg [7:0] EXPECTED_GEN;
   reg [7:0] EXPECTED_CHECK;
-  reg [7:0] EXPECTED_QUEUE [$];
+  reg [7:0] EXPECTED_QUEUE [$];		// Usage of $ to indicate unpacked dimension makes the array dynamic (similar to a C language dynamic array), that is called queue in SystemVerilog
   
   localparam NUL_CHAR = 8'h00;
   
@@ -73,15 +73,15 @@ module caesar_ciph_tb_checks;
   
   
   initial begin //below is a set of encryption or decryption carried out with different keys
-    @(reset_deassertion);
+    @(reset_deassertion);	// Hook reset deassertion (event)
     
-    @(posedge clk);
-		shift_dir_1 = 1'b1;
-		shift_dir_3 = 1'b0;
-		shift_N_1 = 5'd25;
-		shift_N_3 = 5'd5;
-		input_valid = 1'b1;
-		mode = 1'b0;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b1;	// Set shift direction of 1st stage to left
+		shift_dir_3 = 1'b0;	// Set shift direction of 3rd stage to right
+		shift_N_1 = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
+		shift_N_3 = 5'd5;	// Set number of positions to be shifted for 3st stage to 5
+		input_valid = 1'b1;	// 
+		mode = 1'b0;		//
     
     fork
     
@@ -109,13 +109,13 @@ module caesar_ciph_tb_checks;
         
     join
     
-    @(posedge clk);
-		shift_dir_1 = 1'b0;
-		shift_dir_3 = 1'b0;
-		shift_N_1 = 5'd25;
-		shift_N_3 = 5'd26;
-		input_valid = 1'b1;
-		mode = 1'b1;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b0;	// Set shift direction of 1st stage to right	
+		shift_dir_3 = 1'b0;	// Set shift direction of 3rd stage to right
+		shift_N_1 = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
+		shift_N_3 = 5'd26;	// Set number of positions to be shifted for 3st stage to 26
+		input_valid = 1'b1;	// 
+		mode = 1'b1;		//
 		
     
     fork
@@ -146,13 +146,13 @@ module caesar_ciph_tb_checks;
         
     join
     
-    @(posedge clk);
-		shift_dir_1 = 1'b0;
-		shift_dir_3 = 1'b1;
-		shift_N_1 = 5'd5;
-		shift_N_3 = 5'd6;
-		input_valid = 1'b1;
-		mode = 1'b0;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b0;	// Set shift direction of 1st stage to right
+		shift_dir_3 = 1'b1;	// Set shift direction of 3rd stage to left
+		shift_N_1 = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
+		shift_N_3 = 5'd6;	// Set number of positions to be shifted for 3st stage to 6
+		input_valid = 1'b1;	// 
+		mode = 1'b0;		//
     
     fork
     
@@ -182,13 +182,13 @@ module caesar_ciph_tb_checks;
         
     join
     
-    @(posedge clk);
-		shift_dir_1 = 1'b1;
-		shift_dir_3 = 1'b0;
-		shift_N_1 = 5'd10;
-		shift_N_3 = 5'd2;
-		input_valid = 1'b1;
-		mode = 1'b1;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b1;	// Set shift direction of 1st stage to left
+		shift_dir_3 = 1'b0;	// Set shift direction of 3rd stage to right
+		shift_N_1 = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
+		shift_N_3 = 5'd2;	// Set number of positions to be shifted for 3st stage to 2
+		input_valid = 1'b1;	// 
+		mode = 1'b1;		//
     
     fork
     
@@ -218,13 +218,13 @@ module caesar_ciph_tb_checks;
         
     join
     
-    @(posedge clk);
-		shift_dir_1 = 1'b1;
-		shift_dir_3 = 1'b1;
-		shift_N_1 = 5'd5;
-		shift_N_3 = 5'd20;
-		input_valid = 1'b1;
-		mode = 1'b0;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b1;	// Set shift direction of 1st stage to left
+		shift_dir_3 = 1'b1;	// Set shift direction of 3rd stage to left
+		shift_N_1 = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
+		shift_N_3 = 5'd20;	// Set number of positions to be shifted for 3st stage to 20
+		input_valid = 1'b1;	// 
+		mode = 1'b0;		//
     
     fork
     
@@ -248,13 +248,13 @@ module caesar_ciph_tb_checks;
         
     join
     
-    @(posedge clk);
-		shift_dir_1 = 1'b0;
-		shift_dir_3 = 1'b0;
-		shift_N_1 = 5'd28;
-		shift_N_3 = 5'd1;
-		input_valid = 1'b1;
-		mode = 1'b1;
+    @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
+		shift_dir_1 = 1'b0;	// Set shift direction of 1st stage to right
+		shift_dir_3 = 1'b0;	// Set shift direction of 3rd stage to right
+		shift_N_1 = 5'd28;	// Set number of positions to be shifted for 1st stage to 28
+		shift_N_3 = 5'd1;	// Set number of positions to be shifted for 3st stage to 1
+		input_valid = 1'b1;	// 
+		mode = 1'b1;		//
     
     fork
     
