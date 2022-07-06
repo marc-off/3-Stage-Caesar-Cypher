@@ -8,13 +8,13 @@ module 3stage_caesar_cipher (
 
    input            clk								// Clock signal input
   ,input            rst_n							// Asynchronous active-low reset port
+  ,input      [4:0] 1st_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  ,input      [4:0] 3rd_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  ,input            1st_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
+  ,input            3rd_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
+  ,input      [7:0] plaintext_char					// input port which represents the plaintext char to encrypt
   ,input            flag_cipher_operation           // input port to select encryption or decryption mode: 1'b0 = encrypt operation; 1'b1 = decrypt operation
   ,input            flag_valid_plaintext_char       // 1'b0 = invalid char; 1'b1 = valid char
-  ,input            1st_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
-  ,input      [4:0] 1st_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
-  ,input            3rd_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
-  ,input      [4:0] 3rd_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
-  ,input      [7:0] plaintext_char					// input port which represents the plaintext char to encrypt
   ,output reg [7:0] ciphertext_char					// output port which represents the ciphertext char of the corresponding plaintext character
   ,output reg       flag_ciphertext_ready			// Flag specifying that the ciphertext character is ready to be sampled by the clock signal
   ,output reg       err_invalid_key_shift_num		// Flag representing error concerning the key (invalid value of position to shift)
@@ -135,136 +135,65 @@ module 3stage_caesar_cipher (
 	/* Decryption flag = 1'b1 */
     else begin 
 
-        /* caso d1 = 0, d3 = 0 , d2 = d1 ^ d3 = 0 */
-        if(!1st_key_shift_direction && !3rd_key_shift_direction) begin
-            sub_letter = plaintext_char - {3'b000, 1st_key_shift_number} - {3'b000, 2nd_key_shift_number} - {3'b000, 3rd_key_shift_number};
-			
-            if(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR || sub_letter > 200))begin
-                sub_letter += 8'h1A;
-				 if(sub_letter < UPPERCASE_A_CHAR  || sub_letter > 200)begin
-					sub_letter += 8'h1A;
-					if(sub_letter < UPPERCASE_A_CHAR  || sub_letter > 200 )
-						sub_letter += 8'h1A;
-					else
-						sub_letter = sub_letter;
-				end
-				else
-					sub_letter = sub_letter;
+        case (3rd_key_shift_direction)
+			1'b0: begin
+				sub_letter = plaintext_char - {3'b000, 3rd_key_shift_number}; // Shift
+				// -----------------------------------------------------------------
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+				)							// Check if "underflow" (uppercase and lowercase letter case)...
+        			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
-			else
-				sub_letter = sub_letter;
-					
-            if(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))begin
-                sub_letter += 8'h1A;
-				if(sub_letter < LOWERCASE_A_CHAR)begin
-					sub_letter += 8'h1A;
-					if(sub_letter < LOWERCASE_A_CHAR)
-						sub_letter += 8'h1A;
-					else
-						sub_letter = sub_letter;
-				end
-				else
-					sub_letter = sub_letter;
+			1'b1: begin
+				sub_letter = plaintext_char + {3'b000, 3rd_key_shift_number};
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))
+				)							// Check if "overflow" (uppercase and lowercase letter case)...
+        			sub_letter -= 8'h1A;	// ... and wrap if so
 			end
-			else
-				sub_letter = sub_letter;			
-        end
+        endcase
 
-        /* caso d1 = 0, d3 = 1 */
-        else if(!1st_key_shift_direction && 3rd_key_shift_direction) begin
-            sub_letter = plaintext_char - {3'b000, 1st_key_shift_number} + {3'b000, 2nd_key_shift_number} + {3'b000, 3rd_key_shift_number};
-            if(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-                if(sub_letter > UPPERCASE_Z_CHAR)
-                    sub_letter -= 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-                if(sub_letter > LOWERCASE_Z_CHAR)
-                    sub_letter -= 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR))begin
-                sub_letter += 8'h1A;
-                if(sub_letter < UPPERCASE_A_CHAR)
-                    sub_letter += 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))begin
-                sub_letter += 8'h1A;
-                if(sub_letter < LOWERCASE_A_CHAR)
-                    sub_letter += 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-			else
-				sub_letter = sub_letter;
-        end
+		case (2nd_key_shift_direction)
+			1'b0: begin
+				sub_letter = sub_letter - {3'b000, 2nd_key_shift_number}; // Shift
+				// -----------------------------------------------------------------
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+				)							// Check if "underflow" (uppercase and lowercase letter case)...
+        			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
+			end
+			1'b1: begin
+				sub_letter = sub_letter + {3'b000, 2nd_key_shift_number};
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))
+				)							// Check if "overflow" (uppercase and lowercase letter case)...
+        			sub_letter -= 8'h1A;	// ... and wrap if so
+			end
+        endcase
 		
-
-        /* caso d1 = 1, d3 = 0*/
-        else if(1st_key_shift_direction && !3rd_key_shift_direction) begin
-            sub_letter = plaintext_char + {3'b000, 1st_key_shift_number} + {3'b000, 2nd_key_shift_number} - {3'b000, 3rd_key_shift_number};
-            if(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-                if(sub_letter > UPPERCASE_Z_CHAR)
-                    sub_letter -= 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-                if(sub_letter > LOWERCASE_Z_CHAR)
-                    sub_letter -= 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR))begin
-                sub_letter += 8'h1A;
-                if(sub_letter < UPPERCASE_A_CHAR)
-                    sub_letter += 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-            else if(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))begin
-                sub_letter += 8'h1A;
-                if(sub_letter < LOWERCASE_A_CHAR)
-                    sub_letter += 8'h1A;
-                else
-                    sub_letter = sub_letter;
-            end
-			else
-				sub_letter = sub_letter;
-        end
-
-        /* caso d1 = 1, d3 = 1*/
-        else if(1st_key_shift_direction && 3rd_key_shift_direction) begin
-            sub_letter = plaintext_char + {3'b000, 1st_key_shift_number} - {3'b000, 2nd_key_shift_number} + {3'b000, 3rd_key_shift_number};
-             if(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-				if((sub_letter > UPPERCASE_Z_CHAR))
-					sub_letter -= 8'h1A;
-				else
-					sub_letter = sub_letter;
+		case (1st_key_shift_direction)
+			1'b0: begin
+				sub_letter = sub_letter - {3'b000, 1st_key_shift_number}; // Shift
+				// -----------------------------------------------------------------
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+				)							// Check if "underflow" (uppercase and lowercase letter case)...
+        			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
-			else
-				sub_letter = sub_letter;
-            if(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))begin
-                sub_letter -= 8'h1A;
-				 if((sub_letter > LOWERCASE_Z_CHAR))
-					sub_letter -= 8'h1A;
-				 else
-					sub_letter = sub_letter;
+			1'b1: begin
+				sub_letter = sub_letter + {3'b000, 1st_key_shift_number};
+				if(
+					(ptxt_char_is_uppercase_letter && (sub_letter > UPPERCASE_Z_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter > LOWERCASE_Z_CHAR))
+				)							// Check if "overflow" (uppercase and lowercase letter case)...
+        			sub_letter -= 8'h1A;	// ... and wrap if so
 			end
-			else
-				sub_letter = sub_letter;
-        end
-		else
-			sub_letter = NULL_CHAR;
+        endcase
 	
     end
 
@@ -282,8 +211,22 @@ module 3stage_caesar_cipher (
     else if(flag_err_invalid_ptxt_char || flag_err_invalid_key_shift_num || !flag_valid_plaintext_char) begin
       flag_ciphertext_ready <= 1'b0;
       ciphertext_char <= NULL_CHAR;
-	  err_invalid_key_shift_num <= 1'b1;
-	  err_invalid_ptxt_char <=1'b1;
+	  case (flag_err_invalid_ptxt_char):
+        1'b1: begin
+            err_invalid_ptxt_char <=1'b1;
+        end
+        1'b0: begin
+            err_invalid_ptxt_char <=1'b0;
+        end
+      endcase
+      case (flag_err_invalid_key_shift_num):
+        1'b1: begin
+            err_invalid_key_shift_num <= 1'b1;
+        end
+        1'b0: begin
+            err_invalid_key_shift_num <= 1'b0;
+        end
+      endcase
 	  end
     else begin
       flag_ciphertext_ready <= 1'b1;
