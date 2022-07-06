@@ -16,10 +16,10 @@ module caesar_ciph_tb_checks;
     -> reset_deassertion;	// trigger event named 'reset_deassertion'
   end
   
-  reg        first_shift_direction;
-  reg        third_shift_direction;
-  reg  [4:0] first_shift_number;
-  reg  [4:0] third_shift_number;
+  reg        1st_shift_direction;
+  reg        3rd_shift_direction;
+  reg  [4:0] 1st_shift_number;
+  reg  [4:0] 3rd_shift_number;
   reg  [7:0] plaintext_char;
   reg     input_valid;
   reg     flag_cipher_operation;
@@ -28,15 +28,15 @@ module caesar_ciph_tb_checks;
   wire    invalid_char;
   wire    ready;
 
-  three_stage_caesar_cipher INSTANCE_NAME (
+  3stage_caesar_cipher INSTANCE_NAME (
       .clk                      (clk)
     ,.rst_n                     (rst_n)
     ,.flag_valid_plaintext_char                (input_valid)
     ,.flag_cipher_operation                      (flag_cipher_operation)
-    ,.first_key_shift_direction            (first_shift_direction)
-    ,.third_key_shift_direction            (third_shift_direction)
-    ,.first_key_shift_number           (first_shift_number)
-    ,.third_key_shift_number           (third_shift_number)
+    ,.1st_key_shift_direction            (1st_shift_direction)
+    ,.3rd_key_shift_direction            (3rd_shift_direction)
+    ,.1st_key_shift_number           (1st_shift_number)
+    ,.3rd_key_shift_number           (3rd_shift_number)
     ,.plaintext_char                 (plaintext_char)
     ,.ciphertext_char                 (ciphertext_char)
     ,.err_invalid_key_shift_num (invalid_key)
@@ -48,13 +48,14 @@ module caesar_ciph_tb_checks;
   reg [7:0] EXPECTED_CHECK;
   reg [7:0] EXPECTED_QUEUE [$];		// Usage of $ to indicate unpacked dimension makes the array dynamic (similar to a C language dynamic array), that is called queue in SystemVerilog
 
-  localparam NULL_CHAR = 8'h00;
-  localparam UPPERCASE_A_CHAR = 8'h41;
-  localparam UPPERCASE_Z_CHAR = 8'h5A;
-  localparam LOWERCASE_A_CHAR = 8'h61;
-  localparam LOWERCASE_Z_CHAR = 8'h7A;
+
+  localparam NULL_CHAR 8'h00
+localparam UPPERCASE_A_CHAR = 8'h41;
+localparam UPPERCASE_Z_CHAR = 8'h5A;
+localparam LOWERCASE_A_CHAR = 8'h61;
+localparam LOWERCASE_Z_CHAR = 8'h7A;
   
-  wire err_invalid_key_shift_num = first_shift_number > 26 || third_shift_number > 26 || first_shift_number == third_shift_number; // control of the conditions on the shift values
+  wire err_invalid_key_shift_num = 1st_shift_number > 26 || 3rd_shift_number > 26 || 1st_shift_number == 3rd_shift_number; // control of the conditions on the shift values
 
   
   wire ptxt_char_is_uppercase_letter = (plaintext_char >= UPPERCASE_A_CHAR) &&
@@ -68,17 +69,17 @@ module caesar_ciph_tb_checks;
     
   wire err_invalid_ptxt_char = !ptxt_char_is_letter; //error signal
   
-  wire second_shift_number =  (first_shift_number + third_shift_number) < 27 ? (first_shift_number + third_shift_number) : (first_shift_number + third_shift_number) - 27; //generation of the key_shift_num_x
+  wire 2nd_shift_number =  (1st_shift_number + 3rd_shift_number) < 27 ? (1st_shift_number + 3rd_shift_number) : (1st_shift_number + 3rd_shift_number) - 27; //generation of the key_shift_num_x
   
   
   initial begin //below is a set of encryption or decryption carried out with different keys
     @(reset_deassertion);	// Hook reset deassertion (event)
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
-		third_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		first_shift_number = 5'd16;	// Set number of positions to be shifted for 1st stage to 16
-		third_shift_number = 5'd8;	// Set number of positions to be shifted for 3st stage to 8
+		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd16;	// Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd8;	// Set number of positions to be shifted for 3st stage to 8
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -109,10 +110,10 @@ module caesar_ciph_tb_checks;
     join
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b0;	// Set shift direction of 1st stage to right	
-		third_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		first_shift_number = 5'd26;	// Set number of positions to be shifted for 1st stage to 26
-		third_shift_number = 5'd3;	// Set number of positions to be shifted for 3st stage to 3
+		1st_shift_direction = 1'b0;	// Set shift direction of 1st stage to right	
+		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd26;	// Set number of positions to be shifted for 1st stage to 26
+		3rd_shift_number = 5'd3;	// Set number of positions to be shifted for 3st stage to 3
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;	// Setting the cipher operation flag into 1'b1 : decrypt mode
 		
@@ -146,10 +147,10 @@ module caesar_ciph_tb_checks;
     join
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b0;	// Set shift direction of 1st stage to right
-		third_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
-		first_shift_number = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
-		third_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
+		1st_shift_direction = 1'b0;	// Set shift direction of 1st stage to right
+		3rd_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
+		1st_shift_number = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
+		3rd_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -182,10 +183,10 @@ module caesar_ciph_tb_checks;
     join
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
-		third_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		first_shift_number = 5'd14;	// Set number of positions to be shifted for 1st stage to 142
-		third_shift_number = 5'd22;	// Set number of positions to be shifted for 3st stage to 22
+		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd14;	// Set number of positions to be shifted for 1st stage to 142
+		3rd_shift_number = 5'd22;	// Set number of positions to be shifted for 3st stage to 22
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
     
@@ -218,10 +219,10 @@ module caesar_ciph_tb_checks;
     join
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
-		third_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
-		first_shift_number = 5'd2;	// Set number of positions to be shifted for 1st stage to 2
-		third_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
+		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
+		1st_shift_number = 5'd2;	// Set number of positions to be shifted for 1st stage to 2
+		3rd_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;	// Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -248,10 +249,10 @@ module caesar_ciph_tb_checks;
     join
     
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
-		first_shift_direction = 1'b0;	// Set shift direction of 1st stage to right
-		third_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		first_shift_number = 5'd28;	// Set number of positions to be shifted for 1st stage to 28
-		third_shift_number = 5'd1;	// Set number of positions to be shifted for 3st stage to 1
+		1st_shift_direction = 1'b0;	// Set shift direction of 1st stage to right
+		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd28;	// Set number of positions to be shifted for 1st stage to 28
+		3rd_shift_number = 5'd1;	// Set number of positions to be shifted for 3st stage to 1
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
     
@@ -308,10 +309,10 @@ module caesar_ciph_tb_file_enc;
     -> reset_deassertion;  
   end
   
-  reg        first_shift_direction;
-  reg        third_shift_direction;
-  reg  [4:0] first_shift_number;
-  reg  [4:0] third_shift_number;
+  reg        1st_shift_direction;
+  reg        3rd_shift_direction;
+  reg  [4:0] 1st_shift_number;
+  reg  [4:0] 3rd_shift_number;
   reg  [7:0] plaintext_char;
   reg     input_valid;
   reg     flag_cipher_operation;
@@ -320,15 +321,15 @@ module caesar_ciph_tb_file_enc;
   wire    invalid_char;
   wire    ready;
 
-  three_stage_caesar_cipher INSTANCE_NAME (
+  3stage_caesar_cipher INSTANCE_NAME (
      .clk                       (clk)
     ,.rst_n                     (rst_n)
     ,.flag_valid_plaintext_char         (input_valid)
     ,.flag_cipher_operation            (flag_cipher_operation)
-    ,.first_key_shift_direction              (first_shift_direction)
-    ,.third_key_shift_direction              (third_shift_direction)
-    ,.first_key_shift_number            (first_shift_number)
-    ,.third_key_shift_number            (third_shift_number)
+    ,.1st_key_shift_direction              (1st_shift_direction)
+    ,.3rd_key_shift_direction              (3rd_shift_direction)
+    ,.1st_key_shift_number            (1st_shift_number)
+    ,.3rd_key_shift_number            (3rd_shift_number)
     ,.plaintext_char                 (plaintext_char)
     ,.ciphertext_char                 (ciphertext_char)
     ,.err_invalid_key_shift_num (invalid_key)
@@ -355,11 +356,13 @@ module caesar_ciph_tb_file_enc;
   reg [7:0] PTXT_source2 [$];
   reg [7:0] CTXT_source2 [$];
 
-  localparam NULL_CHAR = 8'h00;
-  localparam UPPERCASE_A_CHAR = 8'h41;
-  localparam UPPERCASE_Z_CHAR = 8'h5A;
-  localparam LOWERCASE_A_CHAR = 8'h61;
-  localparam LOWERCASE_Z_CHAR = 8'h7A;
+  localparam NULL_CHAR 8'h00
+localparam UPPERCASE_A_CHAR = 8'h41;
+localparam UPPERCASE_Z_CHAR = 8'h5A;
+localparam LOWERCASE_A_CHAR = 8'h61;
+localparam LOWERCASE_Z_CHAR = 8'h7A;
+  
+  
   
   initial begin
     @(reset_deassertion);
@@ -367,10 +370,10 @@ module caesar_ciph_tb_file_enc;
     @(posedge clk);
     FP_PTXT = $fopen("tv/ptxt1.txt", "r");  //the file containing the text to be encrypted is opened
     $write("Encrypting file 'tv/ptxt1.txt' to 'tv/ctxt1.txt'... ");
-   	first_shift_direction = 1'b1;     // Set shift direction of 1st stage to left
-		third_shift_direction = 1'b0;     // Set shift direction of 3rd stage to right
-		first_shift_number = 5'd16;       // Set number of positions to be shifted for 1st stage to 16
-		third_shift_number = 5'd1;        // Set number of positions to be shifted for 3st stage to 1
+   	1st_shift_direction = 1'b1;     // Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0;     // Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd16;       // Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd1;        // Set number of positions to be shifted for 3st stage to 1
 		input_valid = 1'b1;             // Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;   // Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -467,10 +470,10 @@ module caesar_ciph_tb_file_enc;
     FP_PTXT = $fopen("tv/ptxt2.txt", "r");
     $write("Encrypting file 't/ptxt2.txt' to 'tv/ctxt2.txt'... ");
    	
-    first_shift_direction = 1'b1; // Set shift direction of 1st stage to left
-		third_shift_direction = 1'b0; // Set shift direction of 3rd stage to right
-		first_shift_number = 5'd16;  // Set number of positions to be shifted for 1st stage to 16
-		third_shift_number = 5'd1;  // Set number of positions to be shifted for 3st stage to 1
+    1st_shift_direction = 1'b1; // Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0; // Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd16;  // Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd1;  // Set number of positions to be shifted for 3st stage to 1
 		input_valid = 1'b1;  // Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;  // Setting the cipher operation flag into 1'b0 : encrypt mode
     
