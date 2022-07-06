@@ -30,9 +30,9 @@ module 3stage_caesar_cipher (
   wire flag_err_invalid_ptxt_char;		// Wire variable for the invalid plaintext character value	(will be used in continuous assignment)
   wire ptxt_char_is_uppercase_letter;
   wire ptxt_char_is_lowercase_letter;
-  wire ptxt_char_is_letter;
-  wire  [4:0] 2nd_key_shift_number;   // Wire variable for the number of position to shift for the 2nd round of Caesar Cipher application
-  wire 2nd_key_shift_direction        // Wire variable for the direction of shift operation for the 2nd round of Caesar Cipher application
+  wire ptxt_char_is_letter;      
+  wire  [4:0] 2nd_key_shift_number;     // Wire variable for the number of position to shift for the 2nd round of Caesar Cipher application
+  wire 2nd_key_shift_direction          // Wire variable for the direction of shift operation for the 2nd round of Caesar Cipher application
   reg  [7:0] sub_letter;
   
   // ---------------------------------------------------------------------------

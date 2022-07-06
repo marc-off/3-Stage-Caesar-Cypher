@@ -77,10 +77,10 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
 		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		1st_shift_number = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
-		3rd_shift_number = 5'd5;	// Set number of positions to be shifted for 3st stage to 5
-		input_valid = 1'b1;	// 
-		flag_cipher_operation = 1'b0;		//
+		1st_shift_number = 5'd16;	// Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd8;	// Set number of positions to be shifted for 3st stage to 8
+		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true 
+		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
     fork
     
@@ -111,10 +111,10 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		1st_shift_direction = 1'b0;	// Set shift direction of 1st stage to right	
 		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		1st_shift_number = 5'd25;	// Set number of positions to be shifted for 1st stage to 25
-		3rd_shift_number = 5'd26;	// Set number of positions to be shifted for 3st stage to 26
-		input_valid = 1'b1;	// 
-		flag_cipher_operation = 1'b1;		//
+		1st_shift_number = 5'd26;	// Set number of positions to be shifted for 1st stage to 26
+		3rd_shift_number = 5'd3;	// Set number of positions to be shifted for 3st stage to 3
+		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
+		flag_cipher_operation = 1'b1;	// Setting the cipher operation flag into 1'b1 : decrypt mode
 		
     
     fork
@@ -148,8 +148,8 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		1st_shift_direction = 1'b0;	// Set shift direction of 1st stage to right
 		3rd_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
-		1st_shift_number = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
-		3rd_shift_number = 5'd6;	// Set number of positions to be shifted for 3st stage to 6
+		1st_shift_number = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
+		3rd_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -184,8 +184,8 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
 		3rd_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		1st_shift_number = 5'd10;	// Set number of positions to be shifted for 1st stage to 10
-		3rd_shift_number = 5'd2;	// Set number of positions to be shifted for 3st stage to 2
+		1st_shift_number = 5'd14;	// Set number of positions to be shifted for 1st stage to 142
+		3rd_shift_number = 5'd22;	// Set number of positions to be shifted for 3st stage to 22
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
     
@@ -220,8 +220,8 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		1st_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
 		3rd_shift_direction = 1'b1;	// Set shift direction of 3rd stage to left
-		1st_shift_number = 5'd5;	// Set number of positions to be shifted for 1st stage to 5
-		3rd_shift_number = 5'd20;	// Set number of positions to be shifted for 3st stage to 20
+		1st_shift_number = 5'd2;	// Set number of positions to be shifted for 1st stage to 2
+		3rd_shift_number = 5'd7;	// Set number of positions to be shifted for 3st stage to 7
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;	// Setting the cipher operation flag into 1'b0 : encrypt mode
     
@@ -305,7 +305,7 @@ module caesar_ciph_tb_file_enc;
   
   initial begin
     #12.8 rst_n = 1'b1;
-    -> reset_deassertion;
+    -> reset_deassertion;  
   end
   
   reg        1st_shift_direction;
@@ -361,14 +361,14 @@ module caesar_ciph_tb_file_enc;
     @(reset_deassertion);
     
     @(posedge clk);
-    FP_PTXT = $fopen("model/prova.txt", "r");  //the file containing the text to be encrypted is opened
-    $write("Encrypting file 'model/prova.txt' to 'tv/ctxt_HW.txt'... ");
-   	1st_shift_direction = 1'b1;
-		3rd_shift_direction = 1'b0;
-		1st_shift_number = 5'd16;
-		3rd_shift_number = 5'd1;
-		input_valid = 1'b1;
-		flag_cipher_operation = 1'b0;
+    FP_PTXT = $fopen("tv/ptxt1.txt", "r");  //the file containing the text to be encrypted is opened
+    $write("Encrypting file 'tv/ptxt1.txt' to 'tv/ctxt1.txt'... ");
+   	1st_shift_direction = 1'b1;     // Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0;     // Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd16;       // Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd1;        // Set number of positions to be shifted for 3st stage to 1
+		input_valid = 1'b1;             // Setting the plaintext input valid port to 1'b1 : true 
+		flag_cipher_operation = 1'b0;   // Setting the cipher operation flag into 1'b0 : encrypt mode
     
     while($fscanf(FP_PTXT, "%c", char) == 1) begin  //the characters of the file are encrypted and placed in a buffer
       plaintext_char = int'(char);
@@ -381,19 +381,19 @@ module caesar_ciph_tb_file_enc;
         CTXT.push_back(ciphertext_char);
       end
       else begin
-        CTXT.push_back(NUL_CHAR);
+        CTXT.push_back(NULL_CHAR);
 		end;
     end
     $fclose(FP_PTXT);
     
-    FP_CTXT = $fopen("tv/ctxt_HW.txt", "w"); //the file to write the ciphertext is opened and the cypher was written
+    FP_CTXT = $fopen("tv/ctxt1.txt", "w"); //the file to write the ciphertext is opened and the cypher was written
     foreach(CTXT[i])
       $fwrite(FP_CTXT, "%c", CTXT[i]);
     $fclose(FP_CTXT);
     
     $display("Encrypt Done!");
 	
-	FP_PTXT = $fopen("model/enc.txt", "r"); //the file containing the encrypted text by the C module is opened
+	FP_PTXT = $fopen("tv/expected_ctxt1.txt", "r"); //the file containing the encrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
       plaintext_char = int'(char);
       begin
@@ -408,11 +408,11 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
 	
-	 $display("Compare Done model/enc.txt - tv/enc_HW.txt!");
+	 $display("Compare Done tv/expected_ctxt1.txt - tv/ctxt1.txt!");
     
     @(posedge clk);
-    FP_CTXT = $fopen("tv/ctxt_HW.txt", "r"); //the file containing the encrypted text is opened
-    $write("Decrypting file 'tv/ctxt_HW.txt' to 'tv/dec_HW.txt'... ");
+    FP_CTXT = $fopen("tv/ctxt1.txt", "r"); //the file containing the encrypted text is opened
+    $write("Decrypting file 'tv/ctxt1.txt' to 'tv/decrypted_ctxt1.txt'... ");
 		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin //the characters of the file are decrypted and placed in a buffer
@@ -426,18 +426,18 @@ module caesar_ciph_tb_file_enc;
         PTXT.push_back(ciphertext_char);
       end
       else
-        PTXT.push_back(NUL_CHAR);
+        PTXT.push_back(NULL_CHAR);
     end
     $fclose(FP_CTXT);
     
-    FP_PTXT = $fopen("tv/dec_HW.txt", "w"); //the file to write the decrypted text is opened and the decryption was written
+    FP_PTXT = $fopen("tv/decrypted_ctxt1.txt", "w"); //the file to write the decrypted text is opened and the decryption was written
     foreach(PTXT[i])
       $fwrite(FP_PTXT, "%c", PTXT[i]);
     $fclose(FP_PTXT);
 	
 	$display("Decrypt Done!");
 	
-	FP_PTXT = $fopen("model/dec.txt", "r"); //the file containing the decrypted text by the C module is opened
+	FP_PTXT = $fopen("tv/expected_decrypted_ctxt1.txt", "r"); //the file containing the decrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
       plaintext_char = int'(char);
       begin
@@ -453,21 +453,22 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Done model/dec.txt - tv/dec_HW.txt!");
+    $display("Compare Done tv/decrypted_ctxt1.txt - tv/expected_decrypted_ctxt1.txt!");
 	
 
   
   /*-------------------test 2----------------------------*/
     
     @(posedge clk);
-    FP_PTXT = $fopen("model/prova2.txt", "r");
-    $write("Encrypting file 'model/prova2.txt' to 'tv/ctxt_HW2.txt'... ");
-   		1st_shift_direction = 1'b1;
-		3rd_shift_direction = 1'b0;
-		1st_shift_number = 5'd16;
-		3rd_shift_number = 5'd1;
-		input_valid = 1'b1;
-		flag_cipher_operation = 1'b0;
+    FP_PTXT = $fopen("tv/ptxt2.txt", "r");
+    $write("Encrypting file 't/ptxt2.txt' to 'tv/ctxt2.txt'... ");
+   	
+    1st_shift_direction = 1'b1; // Set shift direction of 1st stage to left
+		3rd_shift_direction = 1'b0; // Set shift direction of 3rd stage to right
+		1st_shift_number = 5'd16;  // Set number of positions to be shifted for 1st stage to 16
+		3rd_shift_number = 5'd1;  // Set number of positions to be shifted for 3st stage to 1
+		input_valid = 1'b1;  // Setting the plaintext input valid port to 1'b1 : true 
+		flag_cipher_operation = 1'b0;  // Setting the cipher operation flag into 1'b0 : encrypt mode
     
     while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
@@ -480,19 +481,19 @@ module caesar_ciph_tb_file_enc;
         CTXT2.push_back(ciphertext_char);
       end
       else begin
-        CTXT2.push_back(NUL_CHAR);
+        CTXT2.push_back(NULL_CHAR);
 		end;
     end
     $fclose(FP_PTXT);
     
-    FP_CTXT = $fopen("tv/ctxt_HW2.txt", "w");
+    FP_CTXT = $fopen("tv/ctxt2.txt", "w");
     foreach(CTXT2[i])
       $fwrite(FP_CTXT, "%c", CTXT2[i]);
     $fclose(FP_CTXT);
     
     $display("Encrypt Done!");
 	
-	FP_PTXT = $fopen("model/enc2.txt", "r");
+	FP_PTXT = $fopen("tv/expected_ctxt2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
       begin
@@ -507,11 +508,11 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
 	
-	 $display("Compare Done model/enc2.txt - tv/enc_HW2.txt!");
+	 $display("Compare Done tv/ctxt2.txt - tv/expected_ctxt2.txt!");
     
     @(posedge clk);
-    FP_CTXT = $fopen("tv/ctxt_HW2.txt", "r");
-    $write("Decrypting file 'tv/ctxt_HW2.txt' to 'tv/dec_HW2.txt'... ");
+    FP_CTXT = $fopen("tv/ctxt2.txt", "r");
+    $write("Decrypting file 'tv/ctxt2.txt' to 'tv/decrypted_ctxt2.txt'... ");
 		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin
@@ -525,18 +526,18 @@ module caesar_ciph_tb_file_enc;
         PTXT2.push_back(ciphertext_char);
       end
       else
-        PTXT2.push_back(NUL_CHAR);
+        PTXT2.push_back(NULL_CHAR);
     end
     $fclose(FP_CTXT);
     
-    FP_PTXT = $fopen("tv/dec_HW2.txt", "w");
+    FP_PTXT = $fopen("tv/decrypted_ctxt2.txt", "w");
     foreach(PTXT2[i])
       $fwrite(FP_PTXT, "%c", PTXT2[i]);
     $fclose(FP_PTXT);
 	
 	$display("Decrypt Done!");
 	
-	FP_PTXT = $fopen("model/dec2.txt", "r");
+	FP_PTXT = $fopen("tv/expected_decrypted_ctxt2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
       begin
@@ -552,7 +553,7 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Done model/dec2.txt - tv/dec_HW2.txt!");
+    $display("Compare Done tv/decrypted_ctxt2.txt - tv/expected_decrypted_ctxt2.txt!");
     
     $stop;
   end
