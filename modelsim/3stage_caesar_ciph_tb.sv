@@ -69,7 +69,7 @@ localparam LOWERCASE_Z_CHAR = 8'h7A;
     
   wire err_invalid_ptxt_char = !ptxt_char_is_letter; //error signal
   
-  wire 2nd_shift_number =  (1st_shift_number + 3rd_shift_number) < 27 ? (1st_shift_number + 3rd_shift_number) : (1st_shift_number + 3rd_shift_number) - 27; //generation of the key_shift_num_x
+  wire 2nd_shift_number =  (1st_shift_number + 3rd_shift_number) < 26 ? (1st_shift_number + 3rd_shift_number) : (1st_shift_number + 3rd_shift_number) - 26; //generation of the key_shift_num_x
   
   
   initial begin //below is a set of encryption or decryption carried out with different keys
