@@ -68,7 +68,7 @@ module caesar_ciph_tb_checks;
     
   wire err_invalid_ptxt_char = !ptxt_char_is_letter; //error signal
   
-  wire second_shift_number =  (first_shift_number + third_shift_number) < 27 ? (first_shift_number + third_shift_number) : (first_shift_number + third_shift_number) - 27; //generation of the key_shift_num_x
+  wire second_shift_number =  (first_shift_number + third_shift_number) < 26 ? (first_shift_number + third_shift_number) : (first_shift_number + third_shift_number) - 26; //generation of the key_shift_num_x
   
   
   initial begin //below is a set of encryption or decryption carried out with different keys
@@ -95,13 +95,15 @@ module caesar_ciph_tb_checks;
           @(posedge clk);
         end
       end: STIMULI_1R
-       $display("Cifratura [1;25] [0;5]");
+      
+      $display("Cifratura Di,Ki = <[1;16], [1;24] ,[0;8]>");
+
       begin: CHECK_1R
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
         
-          $display("%c", ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
       
         end
       end: CHECK_1R
@@ -132,13 +134,15 @@ module caesar_ciph_tb_checks;
 
         end
       end: STIMULI_1L
-      $display("Decifratura [0;25] [0;26]");
+
+      $display("Decifratura Di,Ki = <[0;26], [0;3] ,[0;3]>");
+
       begin: CHECK_1L
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
        
-          $display("%c", ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         
         end
       end: CHECK_1L
@@ -175,7 +179,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_5R
         
@@ -203,13 +207,13 @@ module caesar_ciph_tb_checks;
         end
       end: STIMULI_5L
 
-      $display("Cifratura Di,Ki = <[1;14], [1;10] ,[0;22]>");
+      $display("Decifratura Di,Ki = <[1;14], [1;10] ,[0;22]>");
       
       begin: CHECK_5L
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);      
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);    
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_5L
         
@@ -238,7 +242,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 128; j++) begin
           @(posedge clk);
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_1R_FULL_SWEEP
         
@@ -265,13 +269,13 @@ module caesar_ciph_tb_checks;
         end
       end: STIMULI_1R_INVALID_SHIFT_N
 
-      $display("Cifratura Di,Ki = <[0;28], [0;3] ,[0;1]>");
+      $display("Decifratura Di,Ki = <[0;28], [0;3] ,[0;1]>");
       
       begin: CHECK_1R_INVALID_SHIFT_N
         @(posedge clk);  
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);     
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_1R_INVALID_SHIFT_N
         

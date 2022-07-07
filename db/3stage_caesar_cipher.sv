@@ -81,8 +81,8 @@ module three_stage_caesar_cipher (
 			1'b1: begin
 				sub_letter = plaintext_char - {3'b000, first_key_shift_number};
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
@@ -101,8 +101,8 @@ module three_stage_caesar_cipher (
 			1'b1: begin
 				sub_letter = sub_letter - {3'b000, second_key_shift_number};
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
@@ -121,8 +121,8 @@ module three_stage_caesar_cipher (
 			1'b1: begin
 				sub_letter = sub_letter - {3'b000, third_key_shift_number};
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
@@ -138,8 +138,8 @@ module three_stage_caesar_cipher (
 				sub_letter = plaintext_char - {3'b000, third_key_shift_number}; // Shift
 				// -----------------------------------------------------------------
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
@@ -158,8 +158,8 @@ module three_stage_caesar_cipher (
 				sub_letter = sub_letter - {3'b000, second_key_shift_number}; // Shift
 				// -----------------------------------------------------------------
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
@@ -178,8 +178,8 @@ module three_stage_caesar_cipher (
 				sub_letter = sub_letter - {3'b000, first_key_shift_number}; // Shift
 				// -----------------------------------------------------------------
 				if(
-					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_Z_CHAR)) ||
-					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_Z_CHAR))
+					(ptxt_char_is_uppercase_letter && (sub_letter < UPPERCASE_A_CHAR)) ||
+					(ptxt_char_is_lowercase_letter && (sub_letter < LOWERCASE_A_CHAR))
 				)							// Check if "underflow" (uppercase and lowercase letter case)...
         			sub_letter += 8'h1A;	// the same as: sub_letter = sub_letter + 8'h1A
 			end
