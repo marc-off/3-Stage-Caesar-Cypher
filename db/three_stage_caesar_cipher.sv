@@ -58,7 +58,7 @@ module three_stage_caesar_cipher (
   assign flag_err_invalid_ptxt_char = !ptxt_char_is_letter;
 
   // Accordingly to the specifics, we evaluate K2 as the sum of K1 and K3 modulus 26. 
-  assign second_key_shift_number = (first_key_shift_number + third_key_shift_number) < 26 ?  (first_key_shift_number + third_key_shift_number) :  (first_key_shift_number + third_key_shift_number)  -  26;
+  assign second_key_shift_number = (first_key_shift_number + third_key_shift_number) < 5'b11010 ?  (first_key_shift_number + third_key_shift_number) :  (first_key_shift_number + third_key_shift_number)  - 5'b11010;
   
   // Accordingly to the specifics, we evaluate D2 as the XOR operation between D1 and D3
   assign second_key_shift_direction = first_key_shift_direction ^ third_key_shift_direction;

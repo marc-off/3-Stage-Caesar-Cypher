@@ -1,8 +1,0 @@
-# project new . proj
-# Loading project proj
-#  project open proj.mpf
-#  project addfile ../db/caesar_cipher.sv
-#  project addfile ../db/dummy.sv
-#  project addfile ../tb/dummy_tb.sv
-#  project addfile ../tb/testbench_progetto.sv
-#  quit

@@ -1,11 +1,11 @@
-C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/db/3stage_caesar_cipher.sv {1 {vlog -work work -sv -stats=none C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/db/3stage_caesar_cipher.sv
+C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/db/three_stage_caesar_cipher.sv {1 {vlog -work work -sv -stats=none C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/db/three_stage_caesar_cipher.sv
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
 -- Compiling module three_stage_caesar_cipher
 
 Top level modules:
 	three_stage_caesar_cipher
 
-} {} {}} C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/tb/3stage_caesar_ciph_tb.sv {1 {vlog -work work -sv -stats=none C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/tb/3stage_caesar_ciph_tb.sv
+} {} {}} C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/modelsim/three_stage_caesar_ciph_tb.sv {1 {vlog -work work -sv -stats=none C:/Users/Marco/Desktop/3-Stage-Caesar-Cypher/modelsim/three_stage_caesar_ciph_tb.sv
 Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
 -- Compiling module caesar_ciph_tb_checks
 -- Compiling module caesar_ciph_tb_file_enc

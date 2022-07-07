@@ -82,6 +82,14 @@ module caesar_ciph_tb_checks;
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
+
     fork
     
       begin: STIMULI_1R
@@ -103,7 +111,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
         
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
       
         end
       end: CHECK_1R
@@ -118,6 +126,13 @@ module caesar_ciph_tb_checks;
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;	// Setting the cipher operation flag into 1'b1 : decrypt mode
 		
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
     
     fork
     
@@ -142,7 +157,7 @@ module caesar_ciph_tb_checks;
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
        
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         
         end
       end: CHECK_1L
@@ -157,6 +172,14 @@ module caesar_ciph_tb_checks;
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;		// Setting the cipher operation flag into 1'b0 : encrypt mode
     
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
+
     fork
     
       begin: STIMULI_5R
@@ -179,7 +202,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_5R
         
@@ -192,6 +215,14 @@ module caesar_ciph_tb_checks;
 		third_shift_number = 5'd22;	// Set number of positions to be shifted for 3st stage to 22
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
+    
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
     
     fork
     
@@ -213,7 +244,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);      
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_5L
         
@@ -227,6 +258,14 @@ module caesar_ciph_tb_checks;
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b0;	// Setting the cipher operation flag into 1'b0 : encrypt mode
     
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
+
     fork
     
       begin: STIMULI_1R_FULL_SWEEP
@@ -242,7 +281,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 128; j++) begin
           @(posedge clk);
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h ; (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_1R_FULL_SWEEP
         
@@ -256,6 +295,14 @@ module caesar_ciph_tb_checks;
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
     
+    $display("D1: %b - K1: %d - D3: %b - K3: %d - Plaintext Valid Port: %b - Cipher Operation Flag: %b"
+            ,first_shift_direction
+            ,first_shift_number
+            ,third_shift_direction
+            ,third_shift_number
+            ,input_valid
+            ,flag_cipher_operation);
+
     fork
     
       begin: STIMULI_1R_INVALID_SHIFT_N
@@ -275,7 +322,7 @@ module caesar_ciph_tb_checks;
         @(posedge clk);  
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);     
-          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_1R_INVALID_SHIFT_N
         
@@ -364,7 +411,7 @@ module caesar_ciph_tb_file_enc;
     
     @(posedge clk);
     FP_PTXT = $fopen("tv/ptxt1.txt", "r");  //the file containing the text to be encrypted is opened
-    $write("Encrypting file 'tv/ptxt1.txt' to 'tv/ctxt1.txt'... ");
+    $write("Encrypting File: 'tv/ptxt1.txt' --> 'tv/ctxt1.txt' ...");
    	first_shift_direction = 1'b1;     // Set shift direction of 1st stage to left
 		third_shift_direction = 1'b0;     // Set shift direction of 3rd stage to right
 		first_shift_number = 5'd16;       // Set number of positions to be shifted for 1st stage to 16
@@ -393,7 +440,7 @@ module caesar_ciph_tb_file_enc;
       $fwrite(FP_CTXT, "%c", CTXT[i]);
     $fclose(FP_CTXT);
     
-    $display("Encrypt Done!");
+    $display("Encrypt Operation Performed Succesfully!");
 	
 	FP_PTXT = $fopen("tv/expected_ctxt1.txt", "r"); //the file containing the encrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
@@ -410,11 +457,11 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
 	
-	 $display("Compare Done tv/expected_ctxt1.txt - tv/ctxt1.txt!");
+	 $display("Compare Performed Succesfully: 'tv/expected_ctxt1.txt' == 'tv/ctxt1.txt'");
     
     @(posedge clk);
     FP_CTXT = $fopen("tv/ctxt1.txt", "r"); //the file containing the encrypted text is opened
-    $write("Decrypting file 'tv/ctxt1.txt' to 'tv/decrypted_ctxt1.txt'... ");
+    $write("Decrypting File: 'tv/ctxt1.txt' --> 'tv/decrypted_ctxt1.txt' ...");
 		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin //the characters of the file are decrypted and placed in a buffer
@@ -437,7 +484,7 @@ module caesar_ciph_tb_file_enc;
       $fwrite(FP_PTXT, "%c", PTXT[i]);
     $fclose(FP_PTXT);
 	
-	$display("Decrypt Done!");
+	$display("Decrypt Operation Performed Succesfully!");
 	
 	FP_PTXT = $fopen("tv/expected_decrypted_ctxt1.txt", "r"); //the file containing the decrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
@@ -455,7 +502,7 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Done tv/decrypted_ctxt1.txt - tv/expected_decrypted_ctxt1.txt!");
+    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt1.txt' == 'tv/expected_decrypted_ctxt1.txt'");
 	
 
   
@@ -463,7 +510,7 @@ module caesar_ciph_tb_file_enc;
     
     @(posedge clk);
     FP_PTXT = $fopen("tv/ptxt2.txt", "r");
-    $write("Encrypting file 't/ptxt2.txt' to 'tv/ctxt2.txt'... ");
+    $write("Encrypting File: 'tv/ptxt2.txt' --> 'tv/ctxt2.txt' ...");
    	
     first_shift_direction = 1'b1; // Set shift direction of 1st stage to left
 		third_shift_direction = 1'b0; // Set shift direction of 3rd stage to right
@@ -493,7 +540,7 @@ module caesar_ciph_tb_file_enc;
       $fwrite(FP_CTXT, "%c", CTXT2[i]);
     $fclose(FP_CTXT);
     
-    $display("Encrypt Done!");
+    $display("Encrypt Operation Performed Succesfully!");
 	
 	FP_PTXT = $fopen("tv/expected_ctxt2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
@@ -510,11 +557,11 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
 	
-	 $display("Compare Done tv/ctxt2.txt - tv/expected_ctxt2.txt!");
+	 $display("Compare Performed Succesfully: 'tv/ctxt2.txt' --> 'tv/expected_ctxt2.txt'");
     
     @(posedge clk);
     FP_CTXT = $fopen("tv/ctxt2.txt", "r");
-    $write("Decrypting file 'tv/ctxt2.txt' to 'tv/decrypted_ctxt2.txt'... ");
+    $write("Decrypting File: 'tv/ctxt2.txt' --> 'tv/decrypted_ctxt2.txt' ...");
 		flag_cipher_operation = 1'b1;
     
     while($fscanf(FP_CTXT, "%c", char) == 1) begin
@@ -537,7 +584,7 @@ module caesar_ciph_tb_file_enc;
       $fwrite(FP_PTXT, "%c", PTXT2[i]);
     $fclose(FP_PTXT);
 	
-	$display("Decrypt Done!");
+	$display("Decrypt Operation Performed Succesfully!");
 	
 	FP_PTXT = $fopen("tv/expected_decrypted_ctxt2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
@@ -555,7 +602,7 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Done tv/decrypted_ctxt2.txt - tv/expected_decrypted_ctxt2.txt!");
+    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt2.txt' == 'tv/expected_decrypted_ctxt2.txt'");
     
     $stop;
   end

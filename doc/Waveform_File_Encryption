@@ -1,0 +1,35 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/clk
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/rst_n
+add wave -noupdate -radix unsigned /caesar_ciph_tb_file_enc/INSTANCE_NAME/first_key_shift_number
+add wave -noupdate -radix unsigned /caesar_ciph_tb_file_enc/INSTANCE_NAME/second_key_shift_number
+add wave -noupdate -radix unsigned /caesar_ciph_tb_file_enc/INSTANCE_NAME/third_key_shift_number
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/first_key_shift_direction
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/second_key_shift_direction
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/third_key_shift_direction
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/flag_cipher_operation
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/flag_valid_plaintext_char
+add wave -noupdate -radix ascii /caesar_ciph_tb_file_enc/INSTANCE_NAME/plaintext_char
+add wave -noupdate -radix ascii /caesar_ciph_tb_file_enc/INSTANCE_NAME/ciphertext_char
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/flag_ciphertext_ready
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/err_invalid_key_shift_num
+add wave -noupdate -radix binary /caesar_ciph_tb_file_enc/INSTANCE_NAME/err_invalid_ptxt_char
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {22005 ps} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 394
+configure wave -valuecolwidth 69
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ps
+update
+WaveRestoreZoom {0 ps} {846 ps}
