@@ -168,14 +168,14 @@ module caesar_ciph_tb_checks;
  
         end
       end: STIMULI_5R
-        $display("Cifratura [0;5] [1;6]");
+
+      $display("Cifratura Di,Ki = <[0;10], [1;17] ,[1;7]>");
+      
       begin: CHECK_5R
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);
-      
-          $display("%c", ciphertext_char);
-     
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
         end
       end: CHECK_5R
         
@@ -195,23 +195,21 @@ module caesar_ciph_tb_checks;
         for(int i = 0; i < 26; i++) begin
           plaintext_char = "A" + i;
           @(posedge clk);
-      
         end
         
         for(int i = 0; i < 26; i++) begin
           plaintext_char = "a" + i;
           @(posedge clk);
-     
         end
       end: STIMULI_5L
-        $display("Decifratura [1;10] [0;2]");
+
+      $display("Cifratura Di,Ki = <[1;14], [1;10] ,[0;22]>");
+      
       begin: CHECK_5L
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
-          @(posedge clk);
-      
-          $display("%c", ciphertext_char);
-    
+          @(posedge clk);      
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);    
         end
       end: CHECK_5L
         
@@ -234,13 +232,13 @@ module caesar_ciph_tb_checks;
         end
       end: STIMULI_1R_FULL_SWEEP
 
-      $display("Cifratura [1;5] [1;20]");
+      $display("Cifratura Di,Ki = <[1;2], [0;9] ,[1;7]>");
       
       begin: CHECK_1R_FULL_SWEEP
         @(posedge clk);
         for(int j = 0; j < 128; j++) begin
           @(posedge clk);
-          $display("%c", ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
         end
       end: CHECK_1R_FULL_SWEEP
         
@@ -267,18 +265,13 @@ module caesar_ciph_tb_checks;
         end
       end: STIMULI_1R_INVALID_SHIFT_N
 
-      $display("Decifratura [0;28] [0;1]");
+      $display("Cifratura Di,Ki = <[0;28], [0;3] ,[0;1]>");
       
       begin: CHECK_1R_INVALID_SHIFT_N
         @(posedge clk);  
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);     
-          $display("Shift Number flag : %b - 
-                    Invalid Char Flag : %b - 
-                    Encrypted char: %c - ", 
-                    invalid_key, 
-                    invalid_char, 
-                    ciphertext_char);
+          $display("Shift Number flag : %b - Invalid Char Flag : %b - Encrypted char: %h - ", invalid_key, invalid_char, ciphertext_char);
         end
       end: CHECK_1R_INVALID_SHIFT_N
         
