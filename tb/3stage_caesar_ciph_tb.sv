@@ -184,7 +184,7 @@ module caesar_ciph_tb_checks;
     @(posedge clk);	// Hook next rising edge of signal clk (used as clock)
 		first_shift_direction = 1'b1;	// Set shift direction of 1st stage to left
 		third_shift_direction = 1'b0;	// Set shift direction of 3rd stage to right
-		first_shift_number = 5'd14;	// Set number of positions to be shifted for 1st stage to 142
+		first_shift_number = 5'd14;	// Set number of positions to be shifted for 1st stage to 14
 		third_shift_number = 5'd22;	// Set number of positions to be shifted for 3st stage to 22
 		input_valid = 1'b1;	// Setting the plaintext input valid port to 1'b1 : true
 		flag_cipher_operation = 1'b1;		// Setting the cipher operation flag into 1'b1 : decrypt mode
@@ -231,17 +231,16 @@ module caesar_ciph_tb_checks;
         for(int i = 0; i < 128; i++) begin
           plaintext_char = 8'h00 + i;
           @(posedge clk);
-      
         end
       end: STIMULI_1R_FULL_SWEEP
-        $display("Cifratura [1;5] [1;20]");
+
+      $display("Cifratura [1;5] [1;20]");
+      
       begin: CHECK_1R_FULL_SWEEP
         @(posedge clk);
         for(int j = 0; j < 128; j++) begin
           @(posedge clk);
-    
           $display("%c", ciphertext_char);
-     
         end
       end: CHECK_1R_FULL_SWEEP
         
@@ -261,23 +260,25 @@ module caesar_ciph_tb_checks;
         for(int i = 0; i < 26; i++) begin
           plaintext_char = "A" + i;
           @(posedge clk);
-       
         end
-        
         for(int i = 0; i < 26; i++) begin
           plaintext_char = "a" + i;
           @(posedge clk);
-     
         end
       end: STIMULI_1R_INVALID_SHIFT_N
-        $display("Decifratura [0;28] [0;1]");
-      begin: CHECK_1R_INVALID_SHIFT_N
-        @(posedge clk);
-        for(int j = 0; j < 52; j++) begin
-          @(posedge clk);
+
+      $display("Decifratura [0;28] [0;1]");
       
-          $display("%c ", ciphertext_char);
-       
+      begin: CHECK_1R_INVALID_SHIFT_N
+        @(posedge clk);  
+        for(int j = 0; j < 52; j++) begin
+          @(posedge clk);     
+          $display("Shift Number flag : %b - 
+                    Invalid Char Flag : %b - 
+                    Encrypted char: %c - ", 
+                    invalid_key, 
+                    invalid_char, 
+                    ciphertext_char);
         end
       end: CHECK_1R_INVALID_SHIFT_N
         
