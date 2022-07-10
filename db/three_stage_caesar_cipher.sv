@@ -2,10 +2,10 @@ module three_stage_caesar_cipher (
 
    input            clk								// Clock signal input
   ,input            rst_n							// Asynchronous active-low reset port
-  ,input      [4:0] first_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
-  ,input      [4:0] third_key_shift_number            // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
-  ,input            first_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
-  ,input            third_key_shift_direction         // 1'b0 = right direction; 1'b1 = left direction
+  ,input      [4:0] first_key_shift_number          // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  ,input      [4:0] third_key_shift_number          // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  ,input            first_key_shift_direction       // 1'b0 = right direction; 1'b1 = left direction
+  ,input            third_key_shift_direction       // 1'b0 = right direction; 1'b1 = left direction
   ,input      [7:0] plaintext_char					// input port which represents the plaintext char to encrypt
   ,input            flag_cipher_operation           // input port to select encryption or decryption mode: 1'b0 = encrypt operation; 1'b1 = decrypt operation
   ,input            flag_valid_plaintext_char       // 1'b0 = invalid char; 1'b1 = valid char
@@ -195,17 +195,17 @@ module three_stage_caesar_cipher (
 	
     end
 
-  // Output char 
+	// Elaboration of Output Signals
 
   always @ (posedge clk or negedge rst_n)
-	//default value at reset
+	// Priority to Asynchronous Active-Low Reset
     if(!rst_n)begin
       flag_ciphertext_ready <= 1'b0;
       ciphertext_char <= NULL_CHAR;
       err_invalid_key_shift_num <= 1'b0;
 	  err_invalid_ptxt_char <=1'b0;
 	  end
-	 //set registers in case of errors
+	// Setting the proper registers whenever an error condition has been invoked
     else if(flag_err_invalid_ptxt_char || flag_err_invalid_key_shift_num || !flag_valid_plaintext_char) begin
       flag_ciphertext_ready <= 1'b0;
       ciphertext_char <= NULL_CHAR;
@@ -226,6 +226,7 @@ module three_stage_caesar_cipher (
         end
       endcase
 	  end
+	// Safe Case: No errors, Output Char is ready to be sampled!
     else begin
       flag_ciphertext_ready <= 1'b1;
       ciphertext_char <= sub_letter;

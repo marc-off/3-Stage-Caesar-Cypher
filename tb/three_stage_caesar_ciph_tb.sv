@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------------------
 module caesar_ciph_tb_checks;
 
-//tempo di clock 5 rit.
+  // Clock time 5ns
   reg clk = 1'b0;
   always #5 clk = !clk;
   
-  //codice per il segnale di reset
+  // Code for the reset signal
   reg rst_n = 1'b0;
   event reset_deassertion;	// event(s), when asserted, can be used as time trigger(s) to synchronize with
   
@@ -16,17 +16,17 @@ module caesar_ciph_tb_checks;
     -> reset_deassertion;	// trigger event named 'reset_deassertion'
   end
   
-  reg        first_shift_direction;
-  reg        third_shift_direction;
-  reg  [4:0] first_shift_number;
-  reg  [4:0] third_shift_number;
-  reg  [7:0] plaintext_char;
-  reg     input_valid;
-  reg     flag_cipher_operation;
-  wire [7:0] ciphertext_char;
-  wire    invalid_key;
-  wire    invalid_char;
-  wire    ready;
+  reg        first_shift_direction;       // 1'b0 = right direction; 1'b1 = left direction          
+  reg        third_shift_direction;       // 1'b0 = right direction; 1'b1 = left direction
+  reg  [4:0] first_shift_number;          // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  reg  [4:0] third_shift_number;          // Number of positions to shift can range from 0 to 26 (sup|log2(26)|=5)
+  reg  [7:0] plaintext_char;              // input port which represents the plaintext char to encrypt
+  reg     input_valid;                    // 1'b0 = invalid char; 1'b1 = valid char
+  reg     flag_cipher_operation;          // input port to select encryption or decryption mode: 1'b0 = encrypt operation; 1'b1 = decrypt operation
+  wire [7:0] ciphertext_char;             // output port which represents the ciphertext char of the corresponding plaintext character
+  wire    invalid_key;                    // Flag representing error concerning the key (invalid value of position to shift)
+  wire    invalid_char;                   // Flag representing error concerning the plaintext char (invalid 8-bit ASCII value)
+  wire    ready;                          // Flag specifying that the ciphertext character is ready to be sampled by the clock signal
 
   three_stage_caesar_cipher INSTANCE_NAME (
       .clk                      (clk)
@@ -382,19 +382,17 @@ module caesar_ciph_tb_file_enc;
   );
  
   
-  int FP_PTXT;
-  int FP_CTXT;
-  string char;
-
-  //buffers used to contain the encrypted and decrypted characters and those present in the source files of model C
+  int FP_PTXT; // File descriptor for plaintext file
+  int FP_CTXT; // File descriptor for ciphertext file
+  string char; // String which contains the character read
 
   //test 1
-  reg [7:0] CTXT [$];
-  reg [7:0] PTXT [$];
-  reg [7:0] PTXT_source [$];
-  reg [7:0] CTXT_source [$];
+  reg [7:0] CTXT [$]; // Dynamic buffer which contains all the encrypted chars
+  reg [7:0] PTXT [$]; // Dynamic buffer which contains all the plaintext chars
+  reg [7:0] PTXT_source [$]; // Dynamic buffer which contains all the plaintext chars from the original plaintext file
+  reg [7:0] CTXT_source [$]; // Dynamic buffer which containts all the ciphertext chars from the proper file
   
-  //test 2
+  //test 2 (Same as before)
   reg [7:0] CTXT2 [$];
   reg [7:0] PTXT2 [$];
   reg [7:0] PTXT_source2 [$];
@@ -419,7 +417,7 @@ module caesar_ciph_tb_file_enc;
 		input_valid = 1'b1;             // Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;   // Setting the cipher operation flag into 1'b0 : encrypt mode
     
-    while($fscanf(FP_PTXT, "%c", char) == 1) begin  //the characters of the file are encrypted and placed in a buffer
+    while($fscanf(FP_PTXT, "%c", char) == 1) begin  // the characters of the file are encrypted and placed in a buffer
       plaintext_char = int'(char);
       @(posedge clk);
       if(
@@ -442,16 +440,16 @@ module caesar_ciph_tb_file_enc;
     
     $display("Encrypt Operation Performed Succesfully!");
 	
-	FP_PTXT = $fopen("tv/expected_ctxt1.txt", "r"); //the file containing the encrypted text by the C module is opened
+	FP_PTXT = $fopen("tv/expected_ctxt1.txt", "r"); 
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
       plaintext_char = int'(char);
       begin
-		CTXT_source.push_back(plaintext_char);
+		CTXT_source.push_back(plaintext_char);  // stores the read characters from file into buffer CTXT_source
       end
     end;
     $fclose(FP_PTXT);
 		
-	if(CTXT != CTXT_source)begin //the characters encrypted by the hardware module and the C module are compared
+	if(CTXT != CTXT_source)begin 
 		$display("ERROR");
 		$stop;
 	end
@@ -464,13 +462,13 @@ module caesar_ciph_tb_file_enc;
     $write("Decrypting File: 'tv/ctxt1.txt' --> 'tv/decrypted_ctxt1.txt' ...");
 		flag_cipher_operation = 1'b1;
     
-    while($fscanf(FP_CTXT, "%c", char) == 1) begin //the characters of the file are decrypted and placed in a buffer
+    while($fscanf(FP_CTXT, "%c", char) == 1) begin // the characters of the file are decrypted and placed in a buffer
       plaintext_char = int'(char);
       @(posedge clk);
       if(
         ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
         ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
-      ) begin
+      ) begin // Check 
         @(posedge clk);
         PTXT.push_back(ciphertext_char);
       end
@@ -486,17 +484,17 @@ module caesar_ciph_tb_file_enc;
 	
 	$display("Decrypt Operation Performed Succesfully!");
 	
-	FP_PTXT = $fopen("tv/ptxt1.txt", "r"); //the file containing the decrypted text by the C module is opened
+	FP_PTXT = $fopen("tv/ptxt1.txt", "r"); 
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
       plaintext_char = int'(char);
       begin
-		PTXT_source.push_back(plaintext_char);
+		PTXT_source.push_back(plaintext_char);  // stores the read characters from file into buffer PTXT_source
       end
     end;
     $fclose(FP_PTXT);
 
 	 
-	if(PTXT != PTXT_source)begin //the characters decrypted by the hardware module and the C module are compared
+	if(PTXT != PTXT_source)begin  // Check if the contents of the original plaintext (PTXT_source) is equal to the plaintext obtainted from the decryption of the ciphertext (PTXT)
 		$display("ERROR");
 		$stop;
 	end
@@ -509,7 +507,7 @@ module caesar_ciph_tb_file_enc;
   /*-------------------test 2----------------------------*/
     
     @(posedge clk);
-    FP_PTXT = $fopen("tv/ptxt2.txt", "r");
+    FP_PTXT = $fopen("tv/ptxt2.txt", "r"); // Open the plaintext 2
     $write("Encrypting File: 'tv/ptxt2.txt' --> 'tv/ctxt2.txt' ...");
    	
     first_shift_direction = 1'b1; // Set shift direction of 1st stage to left
@@ -519,24 +517,24 @@ module caesar_ciph_tb_file_enc;
 		input_valid = 1'b1;  // Setting the plaintext input valid port to 1'b1 : true 
 		flag_cipher_operation = 1'b0;  // Setting the cipher operation flag into 1'b0 : encrypt mode
     
-    while($fscanf(FP_PTXT, "%c", char) == 1) begin
-      plaintext_char = int'(char);
+    while($fscanf(FP_PTXT, "%c", char) == 1) begin // Read character from the file opened
+      plaintext_char = int'(char); 
       @(posedge clk);
       if(
         ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
         ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
-      ) begin
-        @(posedge clk);
-        CTXT2.push_back(ciphertext_char);
+      ) begin // If the character read is valid
+        @(posedge clk); 
+        CTXT2.push_back(ciphertext_char); // write the ciphertext_char in the buffer CTXT2
       end
-      else begin
+      else begin // otherwise write NULL_CHAR in the buffer CTXT2
         CTXT2.push_back(NULL_CHAR);
 		end;
     end
-    $fclose(FP_PTXT);
+    $fclose(FP_PTXT); // If there is no char to read, it closes the file
     
     FP_CTXT = $fopen("tv/ctxt2.txt", "w");
-    foreach(CTXT2[i])
+    foreach(CTXT2[i]) // We write the contents of the encrypted characters to the proper file 
       $fwrite(FP_CTXT, "%c", CTXT2[i]);
     $fclose(FP_CTXT);
     
@@ -546,12 +544,12 @@ module caesar_ciph_tb_file_enc;
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
       begin
-		CTXT_source2.push_back(plaintext_char);
+		CTXT_source2.push_back(plaintext_char); // stores the read characters from file into buffer CTXT_source2
       end
     end;
     $fclose(FP_PTXT);
 		
-	if(CTXT2 != CTXT_source2)begin
+	if(CTXT2 != CTXT_source2)begin  // Check each character encrypted has been properly stored into the file
 		$display("ERROR");
 		$stop;
 	end
@@ -564,21 +562,22 @@ module caesar_ciph_tb_file_enc;
     $write("Decrypting File: 'tv/ctxt2.txt' --> 'tv/decrypted_ctxt2.txt' ...");
 		flag_cipher_operation = 1'b1;
     
-    while($fscanf(FP_CTXT, "%c", char) == 1) begin
+    while($fscanf(FP_CTXT, "%c", char) == 1) begin  // Read character from the file opened
       plaintext_char = int'(char);
       @(posedge clk);
       if(
         ((plaintext_char >= UPPERCASE_A_CHAR ) && (plaintext_char <= UPPERCASE_Z_CHAR)) ||
         ((plaintext_char >= LOWERCASE_A_CHAR ) && (plaintext_char <= LOWERCASE_Z_CHAR))
-      ) begin
+      ) begin // If the character read is valid
         @(posedge clk);
-        PTXT2.push_back(ciphertext_char);
+        PTXT2.push_back(ciphertext_char); // write the ciphertext_char decrypted in the buffer PTXT2
       end
-      else
-        PTXT2.push_back(NULL_CHAR);
+      else   
+        PTXT2.push_back(NULL_CHAR); // otherwise write NULL_CHAR in the buffer PTXT2
     end
     $fclose(FP_CTXT);
     
+    // Write the decrypted chars in the proper file
     FP_PTXT = $fopen("tv/decrypted_ctxt2.txt", "w");
     foreach(PTXT2[i])
       $fwrite(FP_PTXT, "%c", PTXT2[i]);
@@ -590,13 +589,13 @@ module caesar_ciph_tb_file_enc;
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
       begin
-		PTXT_source2.push_back(plaintext_char);
+		PTXT_source2.push_back(plaintext_char);   // stores the read characters from file into buffer PTXT2_source2
       end
     end;
     $fclose(FP_PTXT);
 
 	 
-	if(PTXT2 != PTXT_source2)begin
+	if(PTXT2 != PTXT_source2)begin // Check if the contents of PTXT_source2 (the original plaintext) is equal to the plaintext obtainted from the decryption of the ciphertext (PTXT2)
 		$display("ERROR");
 		$stop;
 	end
