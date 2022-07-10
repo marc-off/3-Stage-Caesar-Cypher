@@ -486,7 +486,7 @@ module caesar_ciph_tb_file_enc;
 	
 	$display("Decrypt Operation Performed Succesfully!");
 	
-	FP_PTXT = $fopen("tv/expected_decrypted_ctxt1.txt", "r"); //the file containing the decrypted text by the C module is opened
+	FP_PTXT = $fopen("tv/ptxt1.txt", "r"); //the file containing the decrypted text by the C module is opened
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin //the characters of the file are placed in a buffer
       plaintext_char = int'(char);
       begin
@@ -502,7 +502,7 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt1.txt' == 'tv/expected_decrypted_ctxt1.txt'");
+    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt1.txt' == 'tv/ptxt1.txt'");
 	
 
   
@@ -586,7 +586,7 @@ module caesar_ciph_tb_file_enc;
 	
 	$display("Decrypt Operation Performed Succesfully!");
 	
-	FP_PTXT = $fopen("tv/expected_decrypted_ctxt2.txt", "r");
+	FP_PTXT = $fopen("tv/ptxt2.txt", "r");
 	while($fscanf(FP_PTXT, "%c", char) == 1) begin
       plaintext_char = int'(char);
       begin
@@ -602,7 +602,7 @@ module caesar_ciph_tb_file_enc;
 	end
     $fclose(FP_PTXT);
     
-    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt2.txt' == 'tv/expected_decrypted_ctxt2.txt'");
+    $display("Compare Performed Succesfully: 'tv/decrypted_ctxt2.txt' == 'tv/ptxt2.txt'");
     
     $stop;
   end
