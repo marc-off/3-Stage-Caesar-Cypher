@@ -244,7 +244,8 @@ module caesar_ciph_tb_checks;
         @(posedge clk);
         for(int j = 0; j < 52; j++) begin
           @(posedge clk);      
-          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", invalid_key, invalid_char, ciphertext_char, ciphertext_char);
+          $display("[ERR_FLAG] Shift Number: %b - [ERR_FLAG] Invalid Char: %b - Encrypted char: (hex)%h - (char)%c", 
+                    invalid_key, invalid_char, ciphertext_char, ciphertext_char);
         end
       end: CHECK_5L
         
